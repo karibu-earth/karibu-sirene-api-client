@@ -4,10 +4,10 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
 [![Test Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen.svg)](htmlcov/index.html)
 [![Code Style](https://img.shields.io/badge/code%20style-ruff-black.svg)](https://github.com/astral-sh/ruff)
-[![Type Checking](https://img.shields.io/badge/type%20checking-mypy%20strict-blue.svg)](https://github.com/karibu-earth/sirene-api-client/actions)
+[![Type Checking](https://img.shields.io/badge/type%20checking-mypy%20strict-blue.svg)](https://github.com/karibu-earth/karibu-sirene-api-client/actions)
 [![Security](https://img.shields.io/badge/security-bandit%20%2B%20pip--audit-green.svg)](https://bandit.readthedocs.io/)
 [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen.svg)](https://pre-commit.com/)
-[![CI/CD](https://github.com/karibu-earth/sirene-api-client/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/karibu-earth/sirene-api-client/actions)
+[![CI/CD](https://github.com/karibu-earth/karibu-sirene-api-client/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/karibu-earth/karibu-sirene-api-client/actions)
 
 A professional Python client for the [French SIRENE API](https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=Sirene&version=V3&provider=insee) provided by [INSEE](https://www.insee.fr/) (Institut National de la Statistique et des Études Économiques).
 
@@ -47,8 +47,8 @@ pip install sirene-api-client
 
 ```bash
 # Clone the repository
-git clone https://github.com/karibu-earth/sirene-api-client.git
-cd sirene-api-client
+git clone https://github.com/karibu-earth/karibu-sirene-api-client.git
+cd karibu-sirene-api-client
 
 # Install with uv (recommended)
 uv pip install -e ".[dev]"
@@ -330,7 +330,7 @@ The GitHub Actions workflow enforces quality standards on production code:
 
 **Release Process**: See [RELEASE_PROCESS.md](.github/RELEASE_PROCESS.md) for detailed release workflow.
 
-View the [CI/CD Pipeline](https://github.com/karibu-earth/sirene-api-client/actions) for current status.
+View the [CI/CD Pipeline](https://github.com/karibu-earth/karibu-sirene-api-client/actions) for current status.
 
 ## Contributing
 

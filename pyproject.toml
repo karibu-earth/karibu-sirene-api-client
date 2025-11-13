@@ -17,9 +17,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/karibu-earth/sirene-api-client"
-Repository = "https://github.com/karibu-earth/sirene-api-client"
-Documentation = "https://github.com/karibu-earth/sirene-api-client#readme"
+Homepage = "https://github.com/karibu-earth/karibu-sirene-api-client"
+Repository = "https://github.com/karibu-earth/karibu-sirene-api-client"
+Documentation = "https://github.com/karibu-earth/karibu-sirene-api-client#readme"
 
 [build-system]
 requires = ["uv_build>=0.9.2,<0.10.0"]
