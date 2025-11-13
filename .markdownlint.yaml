@@ -1,0 +1,12 @@
+# .markdownlint.yaml
+# Configuration for markdownlint-cli.
+# See https://github.com/igorshubovych/markdownlint-cli#configuration for more info.
+
+# We disable the line-length rule (MD013) because enforcing it on documentation,
+# especially with tables and code blocks, can harm readability.
+MD013: false
+
+# Allow duplicate headings in CHANGELOG.md (standard Keep a Changelog format)
+# Each version section can have "Added", "Changed", "Fixed" sections
+MD024:
+  siblings_only: true

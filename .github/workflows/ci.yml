@@ -1,0 +1,68 @@
+name: CI Pipeline
+
+# Trigger the workflow on pushes to main branch and pull requests to main
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # Test job: Runs all quality checks and tests
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.13"]  # Only Python 3.13 as per project requirements
+
+    steps:
+    # Step 1: Get the source code
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Step 2: Set up Python 3.13 environment
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    # Step 3: Install uv (ultra-fast Python package installer)
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        version: "latest"
+
+    # Step 4: Set up Node.js (required for markdownlint-cli)
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    # Step 5: Cache uv dependencies to speed up builds
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/uv
+        key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-uv-
+
+    # Step 6: Install dependencies using uv sync (faster and more reliable)
+    - name: Install dependencies
+      run: uv sync --group dev --group lint --group test --group security
+
+    # Step 7: Configure git for pre-commit
+    - name: Configure git
+      run:
+        git init
+        # git config --global user.name "CI Bot"
+        # git config --global user.email "ci@example.com"
+
+    # Step 8: Run pre-commit hooks using uvx (no installation needed)
+    # This runs all the same checks that developers run locally
+    - name: Run pre-commit hooks
+      run: uvx pre-commit run --all-files
+
+    # Step 9: Run tests with coverage (TDD policy enforcement)
+    - name: Run tests
+      run: uv run pytest -v --cov=sirene_api_client --cov-report=term-missing --cov-report=xml --cov-fail-under=90

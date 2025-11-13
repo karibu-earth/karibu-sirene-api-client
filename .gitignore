@@ -1,0 +1,62 @@
+# Git
+.git
+.gitattributes
+
+# Docker
+docker-temp-folder/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+htmlcov/
+coverage.xml
+.python-version
+
+# IDE
+.idea/
+.vscode/
+
+# Local environment and IDE settings
+.env
+.env.prod
+
+# Build and distribution artifacts
+dist/
+build/
+htmlcov/
+site/
+
+# Test directories
+.pytest_cache/
+.coverage
+test-results/
+
+# mypy
+.mypy_cache
+
+# ruff
+.ruff_cache/
+
+# Pre-commit
+.pre-commit-config.yaml.swp
+
+# db
+db.sqlite3
+
+# cursor rules
+.cursor/
+
+# node
+node_modules/
+/karibu/static/dist/
+
+# logs
+logs/*
+!logs/.gitkeep

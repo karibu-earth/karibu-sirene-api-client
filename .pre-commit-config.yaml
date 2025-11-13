@@ -1,0 +1,180 @@
+# .pre-commit-config.yaml
+# See https://pre-commit.com for more information
+#
+# This file configures a set of git hooks that are run automatically before
+# each commit. This helps to enforce code quality, style, and security standards
+# across the project, catching issues early and ensuring consistency.
+
+# Default configuration for hooks that can be overridden per hook.
+# We set fail_fast to true to stop on the first failing hook, providing quicker feedback.
+fail_fast: true
+
+repos:
+  # ==============================================================================
+  # I. CORE QUALITY & FILE INTEGRITY
+  # Hooks that perform basic checks on file content and structure.
+  # ==============================================================================
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      # --------------- General File Checks ---------------
+      # Rationale: These hooks prevent common and frustrating issues with git,
+      # such as trailing whitespace, inconsistent line endings, and giant files
+      # being committed. They are fundamental for repository hygiene.
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+        args: ['--maxkb=1024'] # Fails if a file larger than 1MB is added.
+
+      # --------------- Syntax & Schema Checks ---------------
+      # Rationale: Validates configuration files to prevent broken deployments
+      # or local environment setups due to simple typos.
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-toml
+      - id: check-json
+
+      # --------------- Cross-Platform Compatibility ---------------
+      # Rationale: Ensures that the repository can be developed on different
+      # operating systems (Windows, macOS, Linux) without file name conflicts.
+      - id: check-case-conflict
+
+  # ==============================================================================
+  # II. PYTHON CODE QUALITY & FORMATTING
+  # Tools that lint, format, and modernize the Python codebase.
+  # ==============================================================================
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.13
+    hooks:
+      # --------------- Linter ---------------
+      # Rationale: Ruff is an extremely fast Python linter that catches a wide
+      # range of errors, from unused imports to complex bugs. Running it on
+      # every commit provides immediate feedback.
+      - id: ruff
+        args: [--fix, --show-fixes] # Automatically fix what's safe to fix.
+        exclude: |
+            (?x)^(
+                examples/.*|
+                .*\.ipynb$|
+                .*\.md$
+            )$
+
+      # --------------- Formatter ---------------
+      # Rationale: We use Ruff's formatter as a replacement for Black. It's
+      # incredibly fast and black-compatible, simplifying our toolchain by
+      # using a single tool for both linting and formatting.
+      - id: ruff-format
+        args: [--check] # In pre-commit, we check for formatting. The user can apply it with `ruff format .`
+        exclude: |
+            (?x)^(
+                examples/.*|
+                .*\.ipynb$|
+                .*\.md$
+            )$
+
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.20.0
+    hooks:
+      # --------------- Python Syntax Modernization ---------------
+      # Rationale: Automatically upgrades Python syntax to the latest and greatest
+      # style for the configured Python version. This keeps the code modern and
+      # readable without manual effort.
+      - id: pyupgrade
+        args: [--py313-plus] # Target Python 3.13 only
+        exclude: |
+            (?x)^(
+                examples/.*|
+                .*\.ipynb$
+            )$
+
+  # ==============================================================================
+  # III. STATIC ANALYSIS & SECURITY
+  # Tools for type checking and identifying potential security vulnerabilities.
+  # ==============================================================================
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.16.1
+    hooks:
+      # --------------- Static Type Checking ---------------
+      # Rationale: MyPy performs static analysis to check for type errors.
+      # Enforcing type safety with `--strict` catches a whole class of bugs
+      # before the code is ever run.
+      # Exclude tests and examples from type checking
+      - id: mypy
+        args: [--strict]
+        exclude: |
+            (?x)^(
+                tests/.*|
+                examples/.*|
+                conftest.py
+            )$
+        additional_dependencies: [
+          "httpx",
+          "attrs",
+          "pydantic",
+          "pyproj",
+          "types-python-dateutil",
+        ]
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.5
+    hooks:
+      # --------------- Security Linter ---------------
+      # Rationale: Bandit scans the code for common security issues, such as
+      # hardcoded passwords, SQL injection risks, and unsafe deserialization.
+      # It's a critical first line of defense.
+      - id: bandit
+        args: ["-c", "pyproject.toml"]
+        additional_dependencies: ["toml"]
+
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      # --------------- Secret Detection ---------------
+      # Rationale: This hook prevents accidental commits of sensitive secrets
+      # like API keys or passwords. It maintains a baseline of "known" false
+      # positives to avoid flagging non-sensitive data.
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+
+  # ==============================================================================
+  # IV. DOCUMENTATION QUALITY
+  # Hooks to ensure documentation is well-formatted.
+  # ==============================================================================
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.45.0
+    hooks:
+        # --------------- Markdown Linter ---------------
+        # Rationale: Given the extensive documentation in this project, this
+        # hook ensures all Markdown files are consistent and well-formatted,
+        # improving readability and maintainability.
+        - id: markdownlint
+          args: [--fix] # Auto-fix basic formatting issues.
+
+  # ==============================================================================
+  # V. DEPENDENCY VULNERABILITY AUDIT & TESTING
+  # Hooks to ensure all dependencies are free from known security vulnerabilities
+  # and that tests pass before commits.
+  # ==============================================================================
+  - repo: https://github.com/pypa/pip-audit
+    rev: v2.9.0
+    hooks:
+      # --------------- Dependency Vulnerability Audit ---------------
+      # Rationale: pip-audit scans for known vulnerabilities in dependencies.
+      # We run it on all requirements files to ensure no insecure packages are used.
+      - id: pip-audit
+        name: pip-audit (pyproject.toml)
+        files: ^pyproject\.toml$
+        args: [--desc, --ignore-vuln, GHSA-4xh5-x5gv-qwph]
+
+  - repo: local
+    hooks:
+      # --------------- Test Execution ---------------
+      # Rationale: Enforces TDD policy by running tests before allowing commits.
+      # This ensures no untested code reaches the repository.
+      - id: pytest
+        name: pytest
+        entry: uv run pytest
+        language: system
+        pass_filenames: false
+        always_run: true
+        args: ["-v", "--tb=short", "--cov=sirene_api_client", "--cov-fail-under=90"]
