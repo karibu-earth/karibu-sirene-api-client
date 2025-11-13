@@ -15,8 +15,8 @@ Thank you for your interest in contributing to sirene-api-client! This document 
 1. **Fork and clone the repository**:
 
    ```bash
-   git clone https://github.com/karibu-earth/sirene-api-client.git
-   cd sirene-api-client
+   git clone https://github.com/karibu-earth/karibu-sirene-api-client.git
+   cd karibu-sirene-api-client
    ```
 
 2. **Install development dependencies**:

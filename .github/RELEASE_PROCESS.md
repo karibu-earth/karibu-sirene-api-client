@@ -173,7 +173,7 @@ git push origin v0.2.0
 
    ## Full Changelog
 
-   See [CHANGELOG.md](https://github.com/karibu-earth/sirene-api-client/blob/main/CHANGELOG.md) for complete details.
+   See [CHANGELOG.md](https://github.com/karibu-earth/karibu-sirene-api-client/blob/main/CHANGELOG.md) for complete details.
 
    ```
 

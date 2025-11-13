@@ -3,15 +3,15 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to a versioning strategy aligned with the SIRENE API version.
+and this project adheres to [Semantic Versioning](https://semver.org/).
 
 **Versioning Strategy:**
 
-- Major.minor version (e.g., 3.11) aligns with SIRENE API version for compatibility identification
-- Patch version (e.g., 3.11.2) represents client library changes (features and fixes)
-- This ensures users can quickly identify which SIRENE API version the client supports
+- This client package targets **SIRENE API v3.11**
+- Version 0.1.0 marks the initial release
+- Future versions will follow semantic versioning (MAJOR.MINOR.PATCH)
 
-## [3.11.2] - 2025-11-04
+## [0.1.0] - 2025-01-XX
 
 ### Added
 
